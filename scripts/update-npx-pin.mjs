@@ -17,5 +17,5 @@ function replacePin(file) {
 }
 
 console.log(`npx pin -> ${coreeVersion}\n`);
-replacePin(path.join(REPO_ROOT, 'gemini-extension.json'));
+replacePin(path.join(REPO_ROOT, 'antigravity-extension.json'));
 replacePin(path.join(REPO_ROOT, 'hooks/hooks.json'));

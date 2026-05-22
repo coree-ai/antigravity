@@ -1,6 +1,6 @@
-# Coree Gemini Extension
+# Coree Antigravity Plugin
 
-[Coree](https://github.com/coree-ai/coree) provides persistent memory and code intelligence for AI agents. This extension integrates Coree into the Gemini CLI.
+[Coree](https://github.com/coree-ai/coree) provides persistent memory and code intelligence for AI agents. This plugin integrates Coree into the Antigravity CLI.
 
 ## Features
 
@@ -11,15 +11,15 @@
 ## Installation
 
 ```bash
-gemini extension install github:coree-ai/gemini
+agy plugin install github:coree-ai/antigravity
 ```
 
 ## Usage
 
-Once installed, Coree provides several MCP tools. You can ask Gemini to search your codebase or memories:
+Once installed, Coree provides several MCP tools. You can ask Antigravity to search your codebase or memories:
 
 ```
 search for how the indexing works
 ```
 
-See [GEMINI.md](./GEMINI.md) for more detailed usage guidelines.
+See [ANTIGRAVITY.md](./ANTIGRAVITY.md) for more detailed usage guidelines.

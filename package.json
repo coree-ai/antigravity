@@ -1,5 +1,5 @@
 {
-  "name": "@coree-ai/gemini-plugin",
+  "name": "@coree-ai/antigravity-plugin",
   "private": true,
   "scripts": {
     "release": "release-it"
@@ -8,5 +8,5 @@
     "@release-it/bumper": "^6.0.0",
     "release-it": "^17.0.0"
   },
-  "version": "0.14.0-1"
+  "version": "0.14.0-2"
 }

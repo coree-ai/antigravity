@@ -1,0 +1,22 @@
+{
+  "name": "coree",
+  "version": "0.14.0-2",
+  "description": "Persistent memory and code intelligence for AI agents",
+  "mcpServers": {
+    "coree": {
+      "command": "npx",
+      "args": [
+        "--yes",
+        "@coree-ai/coree@0.14.0",
+        "serve"
+      ],
+      "env": {
+        "COREE_BINARY_OVERRIDE": "$COREE_BINARY_OVERRIDE",
+        "COREE__MEMORY__REMOTE_AUTH_TOKEN": "$COREE__MEMORY__REMOTE_AUTH_TOKEN",
+        "COREE_CHANNEL": "$COREE_CHANNEL"
+      },
+      "description": "coree MCP server for memory and code intelligence"
+    }
+  },
+  "contextFileName": "ANTIGRAVITY.md"
+}

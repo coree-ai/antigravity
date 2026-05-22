@@ -10,7 +10,7 @@
   "plugins": {
     "@release-it/bumper": {
       "out": [
-        { "file": "gemini-extension.json", "path": "version" }
+        { "file": "antigravity-extension.json", "path": "version" }
       ]
     }
   },
