@@ -11,7 +11,7 @@
 ## Installation
 
 ```bash
-agy plugin install github:coree-ai/antigravity
+agy plugin install https://github.com/coree-ai/antigravity
 ```
 
 ## Usage
