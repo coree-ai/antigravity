@@ -1,8 +1,3 @@
----
-name: coree
-description: Provides persistent memory and hybrid code/memory intelligence search.
----
-
 # coree: Memory and Code Intelligence
 
 You are using **coree**, which provides persistent memory and code intelligence across sessions.

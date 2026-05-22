@@ -10,7 +10,7 @@
   "plugins": {
     "@release-it/bumper": {
       "out": [
-        { "file": "plugin.json", "path": "version" }
+        { "file": "gemini-extension.json", "path": "version" }
       ]
     }
   },
