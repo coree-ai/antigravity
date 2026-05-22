@@ -10,7 +10,7 @@
   "plugins": {
     "@release-it/bumper": {
       "out": [
-        { "file": "antigravity-extension.json", "path": "version" }
+        { "file": "plugin.json", "path": "version" }
       ]
     }
   },

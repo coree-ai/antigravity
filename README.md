@@ -22,4 +22,4 @@ Once installed, Coree provides several MCP tools. You can ask Antigravity to sea
 search for how the indexing works
 ```
 
-See [ANTIGRAVITY.md](./ANTIGRAVITY.md) for more detailed usage guidelines.
+See [SKILL.md](./skills/coree/SKILL.md) for more detailed usage guidelines.

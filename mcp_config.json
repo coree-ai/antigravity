@@ -1,7 +1,4 @@
 {
-  "name": "coree",
-  "version": "0.14.0-2",
-  "description": "Persistent memory and code intelligence for AI agents",
   "mcpServers": {
     "coree": {
       "command": "npx",
@@ -17,6 +14,5 @@
       },
       "description": "coree MCP server for memory and code intelligence"
     }
-  },
-  "contextFileName": "ANTIGRAVITY.md"
+  }
 }
