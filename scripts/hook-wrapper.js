@@ -54,7 +54,7 @@ function runInject(args) {
   });
 }
 
-function main() {
+async function main() {
   try {
     let inputStr = "";
     try {
@@ -131,4 +131,4 @@ function main() {
   }
 }
 
-main();
+main().catch((e) => { console.error(e); console.log("{}"); });
