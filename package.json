@@ -1,12 +1,6 @@
 {
   "name": "@coree-ai/antigravity-plugin",
   "private": true,
-  "scripts": {
-    "release": "release-it"
-  },
-  "devDependencies": {
-    "@release-it/bumper": "^6.0.0",
-    "release-it": "^17.0.0"
-  },
-  "version": "0.14.0-2"
+
+  "version": "0.14.2"
 }
