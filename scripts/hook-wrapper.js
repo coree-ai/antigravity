@@ -75,7 +75,7 @@ function main() {
       logDebug('Running inject --type prompt');
       try {
         const promptJson = JSON.stringify({ prompt: userPrompt });
-        const promptOut = execSync('npx --yes @coree-ai/coree@0.14.0 inject --type prompt --budget 8000', {
+        const promptOut = execSync('npx --yes @coree-ai/coree@0.14.0 inject --type prompt', {
           input: promptJson,
           encoding: 'utf8',
           env: process.env
