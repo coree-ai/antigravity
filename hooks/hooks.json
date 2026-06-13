@@ -3,7 +3,7 @@
     "PreInvocation": [
       {
         "type": "command",
-        "command": "./scripts/hook-wrapper.js"
+        "command": "node ./scripts/hook-wrapper.js"
       }
     ]
   }

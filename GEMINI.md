@@ -2,6 +2,10 @@
 
 You are using **coree**, which provides persistent memory and code intelligence across sessions.
 
+The coree hook wrapper injects relevant context automatically before each
+invocation. Treat that injected context as background - act on it, and use the
+tools below to dig deeper and to store new findings.
+
 ## Core Capabilities
 
 - **Memory Subsystem**: Stores decisions, gotchas, and architectural discoveries.
@@ -9,23 +13,20 @@ You are using **coree**, which provides persistent memory and code intelligence 
 
 ## Primary Tool: `search(query)`
 
-**ALWAYS use `mcp_coree_search` as your primary entry point.**
+**ALWAYS use `search` as your primary entry point.**
 
 - It performs a hybrid search across both memories and source code.
 - Use it before starting a task to see if there is prior context.
 - Use it to find symbols or architectural patterns in the codebase.
+- Use `get_symbol` for exact symbol lookups instead of reading whole files.
 
 ## Memory Hygiene
 
 To keep your memory useful, store findings as they occur:
 
 - **Decisions**: When you make an architectural choice.
-- **Gotchas**: When something didn't work as expected or had a non-obvious cause.
+- **Gotchas**: When something didn't work as expected or had a non-obvious cause (`importance >= 0.8`).
 - **How-it-works**: After exploring a new subsystem.
 - **Facts**: Stable information about the project.
 
-Use `mcp_coree_store_memories` to save these findings. Use `importance >= 0.8` for critical decisions or gotchas.
-
-## Notes
-
-For tentative observations during exploration, use `mcp_coree_capture_note`. These are reviewed at the start of the next session.
+Use `store_memories` to save these findings. Store inline as you work - do not defer to the end of the session.

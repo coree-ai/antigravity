@@ -1,24 +1,70 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const { spawn } = require("child_process");
+
+const COREE_VERSION = "0.14.1";
+const INJECT_TIMEOUT_MS = 115000;
 
 function logDebug(msg) {
   console.error(`[coree-hook] ${msg}`);
 }
 
+function runInject(args) {
+  return new Promise((resolve) => {
+    logDebug(`spawn npx @coree-ai/coree@${COREE_VERSION} inject ${args.join(" ")}`);
+    const child = spawn("npx", [
+      "--yes",
+      `@coree-ai/coree@${COREE_VERSION}`,
+      "inject",
+      ...args,
+    ], {
+      env: process.env,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (d) => { stdout += d; });
+    child.stderr.on("data", (d) => { stderr += d; });
+
+    const timer = setTimeout(() => {
+      child.unref();
+      child.stdout.removeAllListeners();
+      child.stderr.removeAllListeners();
+      logDebug(`inject ${args[0]} timed out after ${INJECT_TIMEOUT_MS}ms; letting npx finish in background`);
+      resolve("");
+    }, INJECT_TIMEOUT_MS);
+
+    child.on("close", (code) => {
+      clearTimeout(timer);
+      if (stderr) logDebug(stderr.trim());
+      if (code !== 0) {
+        logDebug(`inject ${args[0]} exited with code ${code}`);
+        resolve("");
+      } else {
+        resolve(stdout.trim());
+      }
+    });
+
+    child.on("error", (err) => {
+      clearTimeout(timer);
+      logDebug(`spawn error for inject ${args[0]}: ${err.message}`);
+      resolve("");
+    });
+  });
+}
+
 function main() {
   try {
-    // Read stdin fully and synchronously (file descriptor 0)
-    let inputStr = '';
+    let inputStr = "";
     try {
-      inputStr = fs.readFileSync(0, 'utf8');
-    } catch (e) {
-      logDebug(`Failed to read stdin: ${e.message}`);
+      inputStr = fs.readFileSync(0, "utf8");
+    } catch (_e) {
+      // no stdin
     }
 
     logDebug(`Received stdin input length: ${inputStr.length}`);
-    
+
     let inputJson = {};
     if (inputStr.trim()) {
       try {
@@ -29,66 +75,48 @@ function main() {
     }
 
     const transcriptPath = inputJson.transcriptPath;
-    const invocationSeq = inputJson.sequenceNumber || inputJson.invocationSequenceNumber || 0;
-    
-    logDebug(`transcriptPath: ${transcriptPath}, invocationSeq: ${invocationSeq}`);
+    const seqNumber = inputJson.sequenceNumber ?? inputJson.invocationSequenceNumber;
 
-    let userPrompt = '';
+    logDebug(`transcriptPath: ${transcriptPath}, sequenceNumber: ${seqNumber}`);
+
+    let userPrompt = "";
     if (transcriptPath && fs.existsSync(transcriptPath)) {
-      const lines = fs.readFileSync(transcriptPath, 'utf8').trim().split('\n');
+      const lines = fs.readFileSync(transcriptPath, "utf8").trim().split("\n");
       for (let i = lines.length - 1; i >= 0; i--) {
         try {
           const step = JSON.parse(lines[i]);
-          if (step.type === 'USER_INPUT' && step.content) {
+          if (step.type === "USER_INPUT" && step.content) {
             userPrompt = step.content;
             break;
           }
-        } catch (e) {
+        } catch (_e) {
           // ignore
         }
       }
     }
-    
+
     logDebug(`Extracted userPrompt: "${userPrompt}"`);
 
     const injectSteps = [];
-    const isFirstInvocation = invocationSeq === 0;
 
-    // 1. Run Session Start inject if first invocation
-    if (isFirstInvocation) {
-      logDebug('Running inject --type session');
-      try {
-        const sessionOut = execSync('npx --yes @coree-ai/coree@0.14.0 inject --type session', {
-          encoding: 'utf8',
-          env: process.env
-        });
-        if (sessionOut.trim()) {
-          injectSteps.push({ ephemeralMessage: sessionOut.trim() });
-        }
-      } catch (e) {
-        logDebug(`Session inject failed: ${e.message}`);
+    if (seqNumber === 0) {
+      logDebug("Running inject --type session");
+      const sessionOut = await runInject(["--type", "session"]);
+      if (sessionOut) {
+        injectSteps.push({ ephemeralMessage: sessionOut });
       }
+    } else if (seqNumber == null) {
+      logDebug("Skipping session inject: sequenceNumber missing (schema change or parse failure)");
     }
 
-    // 2. Run Prompt inject if we have a prompt
     if (userPrompt) {
-      logDebug('Running inject --type prompt');
-      try {
-        const promptJson = JSON.stringify({ prompt: userPrompt });
-        const promptOut = execSync('npx --yes @coree-ai/coree@0.14.0 inject --type prompt', {
-          input: promptJson,
-          encoding: 'utf8',
-          env: process.env
-        });
-        if (promptOut.trim()) {
-          injectSteps.push({ ephemeralMessage: promptOut.trim() });
-        }
-      } catch (e) {
-        logDebug(`Prompt inject failed: ${e.message}`);
+      logDebug("Running inject --type prompt");
+      const promptOut = await runInject(["--type", "prompt", "--query", userPrompt]);
+      if (promptOut) {
+        injectSteps.push({ ephemeralMessage: promptOut });
       }
     }
 
-    // Format output for Antigravity injectSteps
     let outputJson = {};
     if (injectSteps.length > 0) {
       outputJson = { injectSteps };
