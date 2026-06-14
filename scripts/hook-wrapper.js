@@ -2,7 +2,7 @@
 const fs = require("fs");
 const { spawn } = require("child_process");
 
-const COREE_VERSION = "0.14.1";
+const COREE_VERSION = "0.15.0";
 const INJECT_TIMEOUT_MS = 115000;
 
 function logDebug(msg) {

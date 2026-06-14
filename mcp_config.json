@@ -4,7 +4,7 @@
       "command": "npx",
       "args": [
         "--yes",
-        "@coree-ai/coree@0.14.1",
+        "@coree-ai/coree@0.15.0",
         "serve"
       ]
     }
