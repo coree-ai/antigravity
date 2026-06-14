@@ -1,11 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "enabledManagers": ["custom.regex"],
   "customManagers": [
     {
       "customType": "regex",
       "description": "Bump @coree-ai/coree pin in all text files",
       "managerFilePatterns": [
-        "\\.(?:md|json|toml|rs|ts|js|mjs|ya?ml)$"
+        "/\\.(?:md|json|toml|rs|ts|js|mjs|ya?ml)$/"
       ],
       "matchStrings": [
         "@coree-ai\\/coree@(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)"
@@ -18,7 +19,7 @@
       "customType": "regex",
       "description": "Bump COREE_VERSION constant in opencode src/index.ts",
       "managerFilePatterns": [
-        "src/index\\.ts$"
+        "/src\\/index\\.ts$/"
       ],
       "matchStrings": [
         "COREE_VERSION = \"(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)\""
@@ -31,7 +32,7 @@
       "customType": "regex",
       "description": "Bump nX.Y.Z shorthand in gemini-extension.json",
       "managerFilePatterns": [
-        "gemini-extension\\.json$"
+        "/gemini-extension\\.json$/"
       ],
       "matchStrings": [
         "\"n(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)\""
