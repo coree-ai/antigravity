@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const fs = require("fs");
-const { spawn } = require("child_process");
+const fs = require("node:fs");
+const { spawn } = require("node:child_process");
 
 const COREE_VERSION = "0.15.0";
 const INJECT_TIMEOUT_MS = 115000;
@@ -63,6 +63,28 @@ function runInject(args) {
 
 async function main() {
 	try {
+		// --- Gemini mode: args from command line, no transcript parsing ---
+		const hookEvent = process.env.GEMINI_HOOK_EVENT;
+		if (hookEvent) {
+			const args = process.argv.slice(2);
+			logDebug(`Gemini mode, event: ${hookEvent}, args: ${args.join(" ")}`);
+			const out = await runInject(args);
+			if (!out) {
+				console.log(JSON.stringify({}));
+				return;
+			}
+			console.log(
+				JSON.stringify({
+					hookSpecificOutput: {
+						hookEventName: hookEvent,
+						additionalContext: out,
+					},
+				}),
+			);
+			return;
+		}
+
+		// --- Antigravity mode: stdin transcript parsing ---
 		let inputStr = "";
 		try {
 			inputStr = fs.readFileSync(0, "utf8");
