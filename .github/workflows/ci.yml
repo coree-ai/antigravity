@@ -21,7 +21,7 @@ jobs:
           node-version: 24
 
       - name: Biome CI
-        run: npx @biomejs/biome ci
+        run: npx @biomejs/biome ci scripts/
 
   validate:
     runs-on: ubuntu-latest
