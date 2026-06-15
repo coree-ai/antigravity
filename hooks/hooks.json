@@ -1,10 +1,10 @@
 {
-  "coree-inject": {
-    "PreInvocation": [
-      {
-        "type": "command",
-        "command": "node ./scripts/hook-wrapper.js"
-      }
-    ]
-  }
+	"coree-inject": {
+		"PreInvocation": [
+			{
+				"type": "command",
+				"command": "node ./scripts/hook-wrapper.js"
+			}
+		]
+	}
 }

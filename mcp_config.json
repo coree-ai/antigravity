@@ -1,12 +1,8 @@
 {
-  "mcpServers": {
-    "coree": {
-      "command": "npx",
-      "args": [
-        "--yes",
-        "@coree-ai/coree@0.15.0",
-        "serve"
-      ]
-    }
-  }
+	"mcpServers": {
+		"coree": {
+			"command": "npx",
+			"args": ["--yes", "@coree-ai/coree@0.15.0", "serve"]
+		}
+	}
 }
