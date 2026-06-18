@@ -85,6 +85,41 @@ async function main() {
 		}
 
 		// --- Antigravity mode: stdin transcript parsing ---
+		if (process.argv.includes("stop")) {
+			// Antigravity Stop hook. coree stays text-only: we emit the
+			// end-of-turn checkpoint and let the wrapper own the loop guard.
+			// continueAfterInjection:true re-engages the loop so the agent can
+			// act on the checkpoint (store memories) before finishing.
+			//
+			// Loop guard: Antigravity has no stop_hook_active field (that is a
+			// Claude-Code contract, so coree's own guard in inject.rs is inert
+			// here). terminationReason is the equivalent signal - if this Stop
+			// was triggered by our own injected response re-engaging the loop,
+			// skip so we do not compound.
+			let stopArgs = {};
+			try {
+				stopArgs = JSON.parse(fs.readFileSync(0, "utf8"));
+			} catch (_e) {
+				// no/invalid stdin; treat as a genuine turn-end
+			}
+			if (stopArgs.terminationReason === "INJECTED_RESPONSE") {
+				console.log(JSON.stringify({}));
+				return;
+			}
+			const stopOut = await runInject(["--type", "stop"]);
+			console.log(
+				JSON.stringify(
+					stopOut
+						? {
+								injectSteps: [{ ephemeralMessage: stopOut }],
+								continueAfterInjection: true,
+							}
+						: {},
+				),
+			);
+			return;
+		}
+
 		let inputStr = "";
 		try {
 			inputStr = fs.readFileSync(0, "utf8");
